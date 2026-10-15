@@ -45,6 +45,7 @@ export interface CameraPlayerProps {
   streamUrl: string | null;
   isLoadingUrl?: boolean;
   streamError?: string;
+  showHeader?: boolean;
   onRefreshUrl: (slug: string) => Promise<unknown>;
   onClose: () => void;
   onRetry?: () => void;
@@ -55,6 +56,7 @@ export const CameraPlayer: React.FC<CameraPlayerProps> = ({
   streamUrl,
   isLoadingUrl = false,
   streamError = '',
+  showHeader = true,
   onRefreshUrl,
   onClose,
   onRetry,
@@ -242,8 +244,8 @@ export const CameraPlayer: React.FC<CameraPlayerProps> = ({
 
   return (
     <div className="player">
-      {/* Header Player Rapi: Judul Kiri, Semua Tombol Sejajar di Kanan */}
-      <div className="player-head">
+      {showHeader && (
+        <div className="player-head">
         <div className="player-title-block">
           <div className="player-channel-pill">
             <Cctv size={14} />
@@ -326,7 +328,8 @@ export const CameraPlayer: React.FC<CameraPlayerProps> = ({
             </button>
           </div>
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Video Stream Frame 16:9 yang Presisi Sejak Awal */}
       <div className="player-body" ref={containerRef} />

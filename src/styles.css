@@ -1512,6 +1512,198 @@ body {
   display: block;
 }
 
+/* ── Four-camera monitor wall ── */
+.monitor-wall {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(8px, env(safe-area-inset-top)) 12px max(8px, env(safe-area-inset-bottom));
+  background: var(--bg-app);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.monitor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 0 0 48px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+.monitor-toolbar-title,
+.monitor-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.monitor-toolbar-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.monitor-toolbar-title > svg {
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.monitor-range,
+.monitor-pagination > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.monitor-pagination {
+  gap: 8px;
+}
+
+.monitor-control-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.monitor-control-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.monitor-control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.monitor-exit-btn {
+  flex: 0 0 auto;
+}
+
+.monitor-grid {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.monitor-tile {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+  border-radius: 6px;
+  background: var(--bg-modal);
+}
+
+.monitor-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.monitor-camera-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monitor-camera-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.monitor-camera-status.online { color: #059669; }
+.monitor-camera-status.offline,
+.monitor-camera-status.error { color: #e11d48; }
+
+.monitor-player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.monitor-player .player {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  gap: 0;
+}
+
+.monitor-player .player-body {
+  width: 100%;
+  max-height: calc(50vh - 44px);
+  max-height: calc(50dvh - 44px);
+  border-radius: 4px;
+}
+
+.monitor-player .player-error {
+  max-height: 44px;
+  overflow: auto;
+  padding: 4px 6px;
+  font-size: 10px;
+}
+
+.monitor-feed-placeholder,
+.monitor-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #080a0c;
+  color: #a1a8b0;
+  font-size: 12px;
+}
+
+.monitor-empty-tile {
+  background: transparent;
+  border-style: dashed;
+}
+
+.monitor-empty-state {
+  flex: 1;
+  aspect-ratio: auto;
+  background: transparent;
+}
+
 .player-error {
   display: flex;
   align-items: center;
@@ -1677,6 +1869,62 @@ body {
     display: flex;
   }
 
+  .monitor-wall {
+    padding: max(6px, env(safe-area-inset-top)) 8px max(6px, env(safe-area-inset-bottom));
+  }
+
+  .monitor-toolbar {
+    flex-basis: 42px;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .monitor-toolbar-title {
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .monitor-range,
+  .monitor-pagination > span {
+    font-size: 10px;
+  }
+
+  .monitor-pagination {
+    gap: 4px;
+  }
+
+  .monitor-control-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .monitor-grid {
+    gap: 6px;
+  }
+
+  .monitor-tile-head {
+    min-height: 28px;
+    padding: 3px 5px;
+    gap: 4px;
+  }
+
+  .monitor-camera-name {
+    font-size: 10px;
+  }
+
+  .monitor-camera-status {
+    font-size: 8px;
+  }
+
+  .monitor-player {
+    padding: 2px;
+  }
+
+  .monitor-player .player-body {
+    max-height: calc(50vh - 38px);
+    max-height: calc(50dvh - 38px);
+  }
+
   .btn-icon,
   .theme-toggle-btn {
     width: 34px;
@@ -1811,6 +2059,8 @@ body {
   .modal {
     width: 100%;
     max-width: 100%;
+    height: auto;
+    min-height: 0;
     padding: 8px;
     border-radius: 14px;
     max-height: min(calc(100vh - 24px), 620px);
@@ -1820,21 +2070,23 @@ body {
   }
 
   .player {
-    gap: 10px;
+    gap: 6px;
   }
 
   .player-head {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     padding-right: 0;
   }
 
   .player-title-block {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
-    width: 100%;
+    width: auto;
+    flex: 1 1 180px;
   }
 
   .player-channel-pill {
@@ -1869,9 +2121,10 @@ body {
   .player-actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 6px;
+    justify-content: flex-end;
+    width: auto;
+    flex: 0 1 auto;
+    gap: 4px;
   }
 
   .status-indicator-pill {

@@ -16,11 +16,13 @@ import {
   Sun,
   Moon,
   Menu,
+  Monitor,
   WifiOff,
   CloudOff,
 } from 'lucide-react';
 import MapView from './MapView';
 import CameraPlayer from './CameraPlayer';
+import MonitorWall from './MonitorWall';
 import {
   fetchCameras,
   fetchWifiPoints,
@@ -79,6 +81,7 @@ export const App: React.FC = () => {
   const [wifiStatusFilter, setWifiStatusFilter] = useState<StatusFilter>('all');
   const [isLegalOpen, setIsLegalOpen] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isMonitorOpen, setIsMonitorOpen] = useState<boolean>(false);
 
   const [selectedCamera, setSelectedCamera] = useState<Camera | null>(null);
   const [selectedCameraSlug, setSelectedCameraSlug] = useState<string | null>(null);
@@ -300,6 +303,18 @@ export const App: React.FC = () => {
     <div className="app">
       {/* ── Top Navigation Bar ── */}
       <header className="topbar">
+        <button
+          type="button"
+          className="btn-icon mobile-menu-btn"
+          onClick={() => setIsSidebarOpen((open) => !open)}
+          title={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
+          aria-label={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
+          aria-expanded={isSidebarOpen}
+          aria-controls="mobile-sidebar"
+        >
+          {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+
         {/* Brand Kiri */}
         <div className="brand">
           <img
@@ -321,14 +336,18 @@ export const App: React.FC = () => {
         <div className="topbar-actions">
           <button
             type="button"
-            className="btn-icon mobile-menu-btn"
-            onClick={() => setIsSidebarOpen((open) => !open)}
-            title={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
-            aria-label={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
-            aria-expanded={isSidebarOpen}
-            aria-controls="mobile-sidebar"
+            className="btn-icon monitor-launch-btn"
+            onClick={() => {
+              setIsMonitorOpen(true);
+              const requestFullscreen = document.documentElement.requestFullscreen;
+              if (requestFullscreen) {
+                void requestFullscreen.call(document.documentElement).catch(() => {});
+              }
+            }}
+            title="Buka monitor 4 CCTV"
+            aria-label="Buka monitor 4 CCTV"
           >
-            {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
+            <Monitor size={17} />
           </button>
           <button
             type="button"
@@ -692,6 +711,10 @@ export const App: React.FC = () => {
           />
         </section>
       </main>
+
+      {isMonitorOpen && (
+        <MonitorWall cameras={cameras} onExit={() => setIsMonitorOpen(false)} />
+      )}
 
       {/* ── Player Modal (CCTV Live Stream) ── */}
       {selectedCamera && (
