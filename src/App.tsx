@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Sun,
   Moon,
+  Menu,
   WifiOff,
   CloudOff,
 } from 'lucide-react';
@@ -77,6 +78,7 @@ export const App: React.FC = () => {
   const [cameraStatusFilter, setCameraStatusFilter] = useState<StatusFilter>('all');
   const [wifiStatusFilter, setWifiStatusFilter] = useState<StatusFilter>('all');
   const [isLegalOpen, setIsLegalOpen] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const [selectedCamera, setSelectedCamera] = useState<Camera | null>(null);
   const [selectedCameraSlug, setSelectedCameraSlug] = useState<string | null>(null);
@@ -240,6 +242,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleSidebarCameraClick = useCallback((cam: Camera): void => {
+    setIsSidebarOpen(false);
     if (cam.status === 'online') {
       void openCamera(cam);
       return;
@@ -251,8 +254,12 @@ export const App: React.FC = () => {
   // Tutup player dengan tombol Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape' && selectedCamera) {
-        closePlayer();
+      if (e.key === 'Escape') {
+        if (selectedCamera) {
+          closePlayer();
+        } else {
+          setIsSidebarOpen(false);
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -314,6 +321,17 @@ export const App: React.FC = () => {
         <div className="topbar-actions">
           <button
             type="button"
+            className="btn-icon mobile-menu-btn"
+            onClick={() => setIsSidebarOpen((open) => !open)}
+            title={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
+            aria-label={isSidebarOpen ? 'Tutup menu' : 'Buka menu CCTV dan WiFi'}
+            aria-expanded={isSidebarOpen}
+            aria-controls="mobile-sidebar"
+          >
+            {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+          <button
+            type="button"
             className="btn-icon"
             onClick={() => void loadData(true)}
             title="Refresh data"
@@ -341,8 +359,21 @@ export const App: React.FC = () => {
 
       {/* ── Main Layout ── */}
       <main className="layout">
+        {isSidebarOpen && (
+          <button
+            type="button"
+            className="sidebar-overlay"
+            onClick={() => setIsSidebarOpen(false)}
+            aria-label="Tutup menu"
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="sidebar">
+        <aside
+          id="mobile-sidebar"
+          className={`sidebar ${isSidebarOpen ? 'is-open' : ''}`}
+          aria-label="Menu CCTV dan WiFi"
+        >
           {/* Header Tetap di Sidebar (Tidak ikut terscroll) */}
           <div className="sidebar-sticky-top">
             {/* Search Bar */}
@@ -559,6 +590,7 @@ export const App: React.FC = () => {
                           type="button"
                           className={`wifi-card-btn ${isSelected ? 'active' : ''}`}
                           onClick={() => {
+                            setIsSidebarOpen(false);
                             setSelectedWifiId(wifi.id);
                             setWifiFocusKey((prev) => prev + 1);
                             setFocusedLocation({ latitude: wifi.latitude, longitude: wifi.longitude });

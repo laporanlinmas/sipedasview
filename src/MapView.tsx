@@ -89,15 +89,13 @@ function getWifiMarkerIcon(isSelected = false): L.DivIcon {
 }
 
 interface MapControllerProps {
-  items: Array<{ latitude: number; longitude: number }>;
   selectedCamera?: Camera | null;
   focusedLocation?: { latitude: number; longitude: number } | null;
 }
 
-// Pengontrol peta responsif (auto-resize, fitBounds, & flyTo)
-function MapController({ items, selectedCamera, focusedLocation }: MapControllerProps): null {
+// Pengontrol peta responsif (auto-resize & flyTo)
+function MapController({ selectedCamera, focusedLocation }: MapControllerProps): null {
   const map = useMap();
-  const hasFittedRef = useRef(false);
 
   useEffect(() => {
     map.invalidateSize();
@@ -115,17 +113,6 @@ function MapController({ items, selectedCamera, focusedLocation }: MapController
       window.removeEventListener('resize', handleResize);
     };
   }, [map]);
-
-  // Fit bounds pada pemuatan awal
-  useEffect(() => {
-    if (!items.length || hasFittedRef.current) return;
-    const coords: [number, number][] = items.map((i) => [i.latitude, i.longitude]);
-    const bounds = L.latLngBounds(coords);
-    if (bounds.isValid()) {
-      map.fitBounds(bounds.pad(0.12));
-      hasFittedRef.current = true;
-    }
-  }, [items, map]);
 
   // Terbang ke koordinat kamera jika dipilih
   useEffect(() => {
@@ -321,11 +308,6 @@ export const MapView: React.FC<MapViewProps> = ({
   onSelect,
   onSelectWifi,
 }) => {
-  const allCoordinates = useMemo(
-    () => [...cameras, ...wifiPoints].map((item) => ({ latitude: item.latitude, longitude: item.longitude })),
-    [cameras, wifiPoints]
-  );
-
   // Gunakan OpenStreetMap tanpa API key; tile gelap diberi filter pada pane peta.
   const tileConfig = useMemo(() => {
     if (theme === 'dark') {
@@ -365,7 +347,6 @@ export const MapView: React.FC<MapViewProps> = ({
       <ZoomControls defaultCenter={[-7.8694, 111.47]} defaultZoom={14} />
 
       <MapController
-        items={allCoordinates}
         selectedCamera={selectedCamera}
         focusedLocation={focusedLocation}
       />
