@@ -59,7 +59,7 @@ export const App: React.FC = () => {
       const saved = localStorage.getItem('sipedas_theme') as ThemeMode;
       if (saved === 'dark' || saved === 'light') return saved;
     }
-    return 'dark';
+    return 'light';
   });
 
   // Inisialisasi awal dengan data cache offline agar UI langsung tampil cepat (0ms)

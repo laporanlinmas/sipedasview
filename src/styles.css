@@ -80,6 +80,7 @@ body {
 .app {
   display: flex;
   flex-direction: column;
+  height: 100vh;
   height: 100dvh;
   width: 100vw;
   background: var(--bg-app);
@@ -1269,6 +1270,7 @@ body {
 .modal {
   position: relative;
   width: min(880px, 100%);
+  max-height: calc(100vh - 2 * clamp(12px, 3vw, 32px));
   max-height: calc(100dvh - 2 * clamp(12px, 3vw, 32px));
   background: var(--bg-modal);
   border: 1px solid var(--border-card);
@@ -1475,7 +1477,9 @@ body {
   position: relative;
   width: 100%;
   min-width: 0;
+  height: auto;
   aspect-ratio: 16 / 9;
+  flex: 0 0 auto;
   background: #040710;
   border-radius: 12px;
   overflow: hidden;
@@ -1484,6 +1488,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.player-body video-rtc {
+  position: absolute;
+  inset: 0;
 }
 
 .player-body video-rtc,
@@ -1625,6 +1634,7 @@ body {
   /* Layout: Map on top (interactive), Sidebar as bottom sheet */
   .layout {
     flex-direction: column-reverse;
+    height: calc(100vh - 54px);
     height: calc(100dvh - 54px);
   }
 
@@ -1665,6 +1675,7 @@ body {
 
   /* Map and Sidebar split */
   .map-wrap {
+    height: 50vh;
     height: 50dvh;
     min-height: 180px;
     flex: 1;
@@ -1673,6 +1684,7 @@ body {
   .sidebar {
     width: 100%;
     max-width: 100%;
+    height: 50vh;
     height: 50dvh;
     border-right: none;
     border-top: 1px solid var(--border-color);
@@ -1768,6 +1780,7 @@ body {
     max-width: 100%;
     padding: 8px;
     border-radius: 14px;
+    max-height: 94vh;
     max-height: 94dvh;
     overflow-y: auto;
   }
