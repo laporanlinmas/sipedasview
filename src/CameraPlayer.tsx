@@ -262,7 +262,11 @@ export const CameraPlayer: React.FC<CameraPlayerProps> = ({
 
         {/* Action Controls & Tombol Close Sejajar */}
         <div className="player-actions">
-          <div className={`status-indicator-pill ${phase}`}>
+          <div
+            className={`status-indicator-pill ${phase}`}
+            role="status"
+            aria-label={phase === 'live' ? 'Live' : phase === 'connecting' ? 'Menghubungkan' : 'Offline'}
+          >
             {phase === 'live' && <Radio size={13} className="live-pulse" />}
             {phase === 'connecting' && <Loader2 size={13} className="animate-spin" />}
             {phase === 'error' && <AlertCircle size={13} />}

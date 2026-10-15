@@ -133,6 +133,11 @@ const MonitorWall: React.FC<MonitorWallProps> = ({ cameras, onExit }) => {
 
   const closeMonitor = useCallback(() => {
     onExit();
+    try {
+      screen.orientation?.unlock();
+    } catch {
+      // Orientation lock is not available in every browser.
+    }
     if (document.fullscreenElement) {
       void document.exitFullscreen().catch(() => {});
     }
@@ -143,7 +148,14 @@ const MonitorWall: React.FC<MonitorWallProps> = ({ cameras, onExit }) => {
       if (event.key === 'Escape') closeMonitor();
     };
     const handleFullscreenChange = (): void => {
-      if (!document.fullscreenElement) onExit();
+      if (!document.fullscreenElement) {
+        try {
+          screen.orientation?.unlock();
+        } catch {
+          // Orientation lock is not available in every browser.
+        }
+        onExit();
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);

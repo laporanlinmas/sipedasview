@@ -2076,8 +2076,8 @@ body {
   .player-head {
     flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 4px;
     padding-right: 0;
   }
 
@@ -2086,7 +2086,8 @@ body {
     align-items: center;
     gap: 8px;
     width: auto;
-    flex: 1 1 180px;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .player-channel-pill {
@@ -2101,13 +2102,12 @@ body {
   }
 
   .player-title {
-    font-size: 14.5px;
-    line-height: 1.25;
-    white-space: normal;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
+    display: block;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .player-location {
@@ -2123,17 +2123,40 @@ body {
     align-items: center;
     justify-content: flex-end;
     width: auto;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     gap: 4px;
+    flex-wrap: nowrap;
   }
 
   .status-indicator-pill {
-    font-size: 10px;
-    padding: 3px 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    padding: 0;
+    border: 0 !important;
+    background: transparent !important;
+    font-size: 0;
+    letter-spacing: 0;
+  }
+
+  .status-indicator-pill::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status-indicator-pill > * {
+    display: none;
   }
 
   .btn-group {
     gap: 4px;
+    flex-wrap: nowrap;
   }
 
   .player-btn {
@@ -2202,7 +2225,7 @@ body {
   .player-head {
     flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .player-title-block {
@@ -2211,7 +2234,29 @@ body {
 
   .player-actions {
     width: auto;
-    flex: 1 1 100%;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .player-location {
+    display: none;
+  }
+
+  .player-channel-pill {
+    gap: 3px;
+    padding: 3px 5px;
+  }
+
+  .player-btn .btn-label,
+  .player-btn.btn-danger span {
+    display: none;
+  }
+
+  .player-btn:not(.btn-icon-only) {
+    width: 30px;
+    padding: 4px;
   }
 }
 
@@ -2252,5 +2297,22 @@ body {
 
   .foot-info-tag {
     display: none;
+  }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .monitor-wall {
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: 100dvh;
+    height: 100vw;
+    padding: 8px max(8px, env(safe-area-inset-right)) 8px max(8px, env(safe-area-inset-left));
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+  }
+
+  .monitor-player .player-body {
+    max-height: calc(50vw - 38px);
   }
 }

@@ -77,8 +77,7 @@ export const App: React.FC = () => {
   const [apiError, setApiError] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabFilter>('all');
-  const [cameraStatusFilter, setCameraStatusFilter] = useState<StatusFilter>('all');
-  const [wifiStatusFilter, setWifiStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [isLegalOpen, setIsLegalOpen] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isMonitorOpen, setIsMonitorOpen] = useState<boolean>(false);
@@ -279,11 +278,11 @@ export const App: React.FC = () => {
         camera.name.toLowerCase().includes(q) ||
         camera.location.toLowerCase().includes(q) ||
         camera.slug.toLowerCase().includes(q);
-      const matchesStatus = cameraStatusFilter === 'all' ||
-        (cameraStatusFilter === 'active' ? camera.status === 'online' : camera.status !== 'online');
+      const matchesStatus = statusFilter === 'all' ||
+        (statusFilter === 'active' ? camera.status === 'online' : camera.status !== 'online');
       return matchesSearch && matchesStatus;
     });
-  }, [cameras, activeTab, searchQuery, cameraStatusFilter]);
+  }, [cameras, activeTab, searchQuery, statusFilter]);
 
   const filteredWifi = useMemo(() => {
     if (activeTab === 'cctv') return [];
@@ -293,11 +292,11 @@ export const App: React.FC = () => {
       const matchesSearch = !q ||
         wifi.name.toLowerCase().includes(q) ||
         wifi.location.toLowerCase().includes(q);
-      const matchesStatus = wifiStatusFilter === 'all' ||
-        (wifiStatusFilter === 'active' ? isWifiActive(wifi.status) : !isWifiActive(wifi.status));
+      const matchesStatus = statusFilter === 'all' ||
+        (statusFilter === 'active' ? isWifiActive(wifi.status) : !isWifiActive(wifi.status));
       return matchesSearch && matchesStatus;
     });
-  }, [wifiPoints, activeTab, searchQuery, wifiStatusFilter]);
+  }, [wifiPoints, activeTab, searchQuery, statusFilter]);
 
   return (
     <div className="app">
@@ -341,7 +340,15 @@ export const App: React.FC = () => {
               setIsMonitorOpen(true);
               const requestFullscreen = document.documentElement.requestFullscreen;
               if (requestFullscreen) {
-                void requestFullscreen.call(document.documentElement).catch(() => {});
+                void requestFullscreen.call(document.documentElement)
+                  .then(async () => {
+                    try {
+                      await screen.orientation.lock('landscape');
+                    } catch {
+                      // CSS rotates the monitor on browsers that reject orientation lock.
+                    }
+                  })
+                  .catch(() => {});
               }
             }}
             title="Buka monitor 4 CCTV"
@@ -447,6 +454,19 @@ export const App: React.FC = () => {
                 <span className="tab-counter count-wifi">{wifiPoints.length}</span>
               </button>
             </div>
+
+            <div className="status-filter" role="group" aria-label="Filter status CCTV dan WiFi">
+              {(['all', 'active', 'inactive'] as StatusFilter[]).map((filter) => (
+                <button
+                  key={filter}
+                  type="button"
+                  className={`status-filter-btn ${statusFilter === filter ? 'active' : ''}`}
+                  onClick={() => setStatusFilter(filter)}
+                >
+                  {filter === 'all' ? 'Semua' : filter === 'active' ? 'Aktif' : 'Nonaktif'}
+                </button>
+              ))}
+            </div>
           </div>
 
           {apiError && (
@@ -496,19 +516,6 @@ export const App: React.FC = () => {
                     <span>Kamera CCTV ({filteredCameras.length})</span>
                   </div>
                   {loading && <Loader2 size={13} className="animate-spin text-muted" />}
-                </div>
-
-                <div className="status-filter" role="group" aria-label="Filter status CCTV">
-                  {(['all', 'active', 'inactive'] as StatusFilter[]).map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      className={`status-filter-btn ${cameraStatusFilter === filter ? 'active' : ''}`}
-                      onClick={() => setCameraStatusFilter(filter)}
-                    >
-                      {filter === 'all' ? 'Semua' : filter === 'active' ? 'Aktif' : 'Nonaktif'}
-                    </button>
-                  ))}
                 </div>
 
                 <ul className="cam-list">
@@ -585,19 +592,6 @@ export const App: React.FC = () => {
                     <Wifi size={15} className="text-purple" />
                     <span>Hotspot WiFi ({filteredWifi.length})</span>
                   </div>
-                </div>
-
-                <div className="status-filter" role="group" aria-label="Filter status WiFi">
-                  {(['all', 'active', 'inactive'] as StatusFilter[]).map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      className={`status-filter-btn ${wifiStatusFilter === filter ? 'active' : ''}`}
-                      onClick={() => setWifiStatusFilter(filter)}
-                    >
-                      {filter === 'all' ? 'Semua' : filter === 'active' ? 'Aktif' : 'Nonaktif'}
-                    </button>
-                  ))}
                 </div>
 
                 <ul className="wifi-list">
