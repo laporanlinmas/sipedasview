@@ -91,9 +91,13 @@ function localApiPlugin(env: Record<string, string>): Plugin {
  * Header development & preview disamakan dengan produksi: aplikasi ini
  * ditampilkan di dalam iframe (halaman CCTV pada portal Sapa Pedestrian),
  * sehingga header anti-embed tidak boleh dipasang.
+ *
+ * Catatan: `X-Frame-Options` sengaja TIDAK ikut di sini. Nilai `ALLOWALL`
+ * bukan nilai yang valid — hanya SAMEORIGIN / DENY / ALLOW-FROM yang
+ * dipahami browser — sehingga browser tetap memblokir embed. Izin
+ * mengembed cukup diberikan lewat CSP `frame-ancestors *`.
  */
 const FRAME_HEADERS = {
-  'X-Frame-Options': 'ALLOWALL',
   'Content-Security-Policy': 'frame-ancestors *',
 };
 
