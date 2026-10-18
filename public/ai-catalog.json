@@ -1,0 +1,15 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:sipedasview.vercel.app:website:public-dashboard",
+      "displayName": "SIPEDAS VIEW Public Dashboard",
+      "type": "text/html",
+      "url": "https://sipedasview.vercel.app/",
+      "description": "Public dashboard for CCTV and WiFi monitoring in Kabupaten Ponorogo, Indonesia.",
+      "representativeQueries": [
+        "View public CCTV cameras in Ponorogo",
+        "Find public WiFi hotspots in Ponorogo"
+      ]
+    }
+  ]
+}

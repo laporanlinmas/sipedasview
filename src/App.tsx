@@ -391,8 +391,10 @@ export const App: React.FC = () => {
         {/* Brand Kiri */}
         <div className="brand">
           <img
-            src="/assets/icon-512.png"
+            src="/assets/icon-48.png"
             alt="Logo SIPEDAS"
+            width={48}
+            height={48}
             className="brand-logo-img"
           />
           <div className="brand-text">

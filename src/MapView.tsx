@@ -152,7 +152,12 @@ const CameraMarkerItem = React.memo<CameraMarkerItemProps>(({ camera, isSelected
   }, [isSelected]);
 
   return (
-    <Marker ref={markerRef} position={[camera.latitude, camera.longitude]} icon={icon}>
+    <Marker
+      ref={markerRef}
+      position={[camera.latitude, camera.longitude]}
+      icon={icon}
+      title={`CCTV ${camera.name}, ${isOnline ? 'online' : 'offline'}`}
+    >
       <Tooltip direction="top" offset={[0, -42]} opacity={0.96} className="sipedas-tooltip">
         <div className="tooltip-inner">
           <b>{camera.name}</b>
@@ -229,6 +234,7 @@ const WifiMarkerItem = React.memo<WifiMarkerItemProps>(({
       ref={markerRef}
       position={[wifi.latitude, wifi.longitude]}
       icon={icon}
+      title={`WiFi ${wifi.name}`}
       eventHandlers={{
         click: () => {
           onSelect?.(wifi.id);

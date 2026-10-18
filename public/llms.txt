@@ -1,0 +1,7 @@
+# SIPEDAS VIEW
+
+SIPEDAS VIEW is the public CCTV and WiFi monitoring dashboard for Kabupaten Ponorogo, Indonesia.
+
+## Resources
+
+- [SIPEDAS VIEW dashboard](https://sipedasview.vercel.app/)
