@@ -2325,9 +2325,9 @@ body {
    ───────────────────────────────────────────────────────────────────
    Ketika aplikasi ini ditampilkan di dalam iframe dashboard
    SIPEDAS Admin, tata letaknya harus tetap versi desktop: sidebar
-   menempel di kiri, tombol hamburger TIDAK muncul (dipakai di
-   ponsel), dan blok brand di kiri atas disembunyikan karena dashboard
-   sudah punya logo serta navigasinya sendiri.
+   menempel di kiri dan tombol hamburger TIDAK muncul (hanya dipakai
+   di ponsel). Logo dan judul "SIPEDAS VIEW" tetap terlihat agar
+   topbar tidak kosong — hanya menyusut bila iframe-nya sempit.
 
    Sinyalnya datang dari URL: ?embed=1 (ditambahkan oleh induk).
    Kelas .is-embed dipasang oleh React pada elemen akar.
@@ -2337,11 +2337,29 @@ body {
   display: none !important;
 }
 
+/* Brand (logo + "SIPEDAS VIEW") TETAP terlihat di mode embed — hanya
+   tombol hamburger yang disembunyikan. Kalau iframe-nya sempit, brand
+   boleh menyusut dan subtitle dipotong, tapi logo & judulnya tidak
+   boleh hilang supaya topbar tidak terlihat kosong. */
 .is-embed .brand {
-  display: none;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.is-embed .brand-text {
+  min-width: 0;
+}
+
+.is-embed .brand-title {
+  white-space: nowrap;
+}
+
+.is-embed .brand-subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .is-embed .topbar {
-  justify-content: flex-end;
-  padding-left: 12px;
+  padding-left: 14px;
 }
