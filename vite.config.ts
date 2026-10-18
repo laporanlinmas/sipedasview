@@ -87,6 +87,16 @@ function localApiPlugin(env: Record<string, string>): Plugin {
   };
 }
 
+/**
+ * Header development & preview disamakan dengan produksi: aplikasi ini
+ * ditampilkan di dalam iframe (halaman CCTV pada portal Sapa Pedestrian),
+ * sehingga header anti-embed tidak boleh dipasang.
+ */
+const FRAME_HEADERS = {
+  'X-Frame-Options': 'ALLOWALL',
+  'Content-Security-Policy': 'frame-ancestors *',
+};
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const devProxy = env.DEV_API_PROXY || process.env.DEV_API_PROXY;
@@ -98,25 +108,37 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins,
-    server: devProxy
-      ? {
-          proxy: {
-            '/api': {
-              target: devProxy,
-              changeOrigin: true,
+    server: {
+      // Port tetap supaya tidak bentrok dengan project lain dan tidak
+      // diam-diam pindah port (alamat iframe jadi rusak).
+      port: 3003,
+      strictPort: true,
+      headers: FRAME_HEADERS,
+      ...(devProxy
+        ? {
+            proxy: {
+              '/api': {
+                target: devProxy,
+                changeOrigin: true,
+              },
             },
-          },
-        }
-      : {},
-    preview: devProxy
-      ? {
-          proxy: {
-            '/api': {
-              target: devProxy,
-              changeOrigin: true,
+          }
+        : {}),
+    },
+    preview: {
+      port: 3003,
+      strictPort: true,
+      headers: FRAME_HEADERS,
+      ...(devProxy
+        ? {
+            proxy: {
+              '/api': {
+                target: devProxy,
+                changeOrigin: true,
+              },
             },
-          },
-        }
-      : {},
+          }
+        : {}),
+    },
   };
 });

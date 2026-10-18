@@ -34,6 +34,7 @@ import {
   formatApiErrorMessage,
 } from './api';
 import type { Camera, StreamInfo, WifiPoint } from './types';
+import { installThemeBridge } from './frameThemeBridge';
 
 type TabFilter = 'all' | 'cctv' | 'wifi';
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -59,8 +60,14 @@ function formatSyncTime(iso: string): string {
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window !== 'undefined') {
+      // 1. Tema dari halaman induk (portal Sapa Pedestrian) lewat ?theme=.
+      const fromParent = new URLSearchParams(window.location.search).get('theme');
+      if (fromParent === 'dark' || fromParent === 'light') return fromParent;
+      // 2. Pilihan pengguna.
       const saved = localStorage.getItem('sipedas_theme') as ThemeMode;
       if (saved === 'dark' || saved === 'light') return saved;
+      // 3. Preferensi sistem.
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     }
     return 'light';
   });
@@ -93,14 +100,33 @@ export const App: React.FC = () => {
   const [streamError, setStreamError] = useState<string>('');
 
   const refreshKeyRef = useRef<number>(0);
+  // true bila tema sedang dictated oleh halaman induk (iframe).
+  const [themeDrivenByParent, setThemeDrivenByParent] = useState<boolean>(false);
 
   // Terapkan tema ke document root & simpan ke localStorage
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('sipedas_theme', theme);
-  }, [theme]);
+    // Tema yang datang dari halaman induk (iframe) sengaja TIDAK ditulis ke
+    // localStorage: bila aplikasi dibuka langsung, pengguna tetap memakai
+    // pilihannya sendiri, bukan tema yang sedang dipakai dashboard.
+    if (!themeDrivenByParent) localStorage.setItem('sipedas_theme', theme);
+  }, [theme, themeDrivenByParent]);
+
+  // Ikuti tema halaman induk saat aplikasi ini ditampilkan di dalam iframe
+  // (portal Sapa Pedestrian mengirim SIPEDAS_THEME_CHANGE).
+  useEffect(() => {
+    return installThemeBridge({
+      applyTheme: (t) => document.documentElement.setAttribute('data-theme', t),
+      onThemeFromParent: (t) => {
+        setThemeDrivenByParent(true);
+        setTheme(t);
+      },
+    });
+  }, []);
 
   const toggleTheme = useCallback((): void => {
+    // Pilihan manual pengguna selalu menang dan ikut disimpan.
+    setThemeDrivenByParent(false);
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   }, []);
 
