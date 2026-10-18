@@ -144,7 +144,10 @@ body {
   margin-left: auto;
 }
 
-.mobile-menu-btn {
+/* Tombol hamburger hanya untuk tampilan ponsel. Sengaja memakai
+   `.btn-icon.mobile-menu-btn` supaya tetap menang atas aturan `.btn-icon`
+   yang berkutik "display: flex" dan muncul setelahnya. */
+.btn-icon.mobile-menu-btn {
   display: none;
 }
 
@@ -1830,115 +1833,115 @@ body {
 }
 
 /* ── Responsive Adjustments ── */
-@media (max-width: 768px) {
-  /* Keep the map full-screen and show the sidebar as an overlay drawer. */
-  .layout {
+@media (max-width: 768px) {/* Keep the map full-screen and show the sidebar as an overlay drawer. */
+  
+  .is-compact .layout {
     height: auto;
     flex-direction: row;
   }
 
-  .topbar {
+  .is-compact .topbar {
     padding: 8px 12px;
     gap: 8px;
     height: 54px;
   }
 
-  .brand {
+  .is-compact .brand {
     gap: 8px;
   }
 
-  .brand-logo-img {
+  .is-compact .brand-logo-img {
     height: 32px;
     max-width: 110px;
   }
 
-  .brand-title {
+  .is-compact .brand-title {
     font-size: 16px;
     line-height: 1.15;
   }
 
-  .brand-subtitle {
+  .is-compact .brand-subtitle {
     display: none;
   }
 
-  .topbar-actions {
+  .is-compact .topbar-actions {
     gap: 6px;
   }
 
-  .mobile-menu-btn {
+  .is-compact .mobile-menu-btn {
     display: flex;
   }
 
-  .monitor-wall {
+  .is-compact .monitor-wall {
     padding: max(6px, env(safe-area-inset-top)) 8px max(6px, env(safe-area-inset-bottom));
   }
 
-  .monitor-toolbar {
+  .is-compact .monitor-toolbar {
     flex-basis: 42px;
     gap: 6px;
     margin-bottom: 6px;
   }
 
-  .monitor-toolbar-title {
+  .is-compact .monitor-toolbar-title {
     gap: 6px;
     font-size: 12px;
   }
 
-  .monitor-range,
-  .monitor-pagination > span {
+  .is-compact .monitor-range,
+  .is-compact .monitor-pagination > span {
     font-size: 10px;
   }
 
-  .monitor-pagination {
+  .is-compact .monitor-pagination {
     gap: 4px;
   }
 
-  .monitor-control-btn {
+  .is-compact .monitor-control-btn {
     width: 30px;
     height: 30px;
   }
 
-  .monitor-grid {
+  .is-compact .monitor-grid {
     gap: 6px;
   }
 
-  .monitor-tile-head {
+  .is-compact .monitor-tile-head {
     min-height: 28px;
     padding: 3px 5px;
     gap: 4px;
   }
 
-  .monitor-camera-name {
+  .is-compact .monitor-camera-name {
     font-size: 10px;
   }
 
-  .monitor-camera-status {
+  .is-compact .monitor-camera-status {
     font-size: 8px;
   }
 
-  .monitor-player {
+  .is-compact .monitor-player {
     padding: 2px;
   }
 
-  .monitor-player .player-body {
+  .is-compact .monitor-player .player-body {
     max-height: calc(50vh - 38px);
     max-height: calc(50dvh - 38px);
   }
 
-  .btn-icon,
-  .theme-toggle-btn {
+  .is-compact .btn-icon,
+  .is-compact .theme-toggle-btn {
     width: 34px;
     height: 34px;
     border-radius: 8px;
   }
 
-  .map-wrap {
+  .is-compact .map-wrap {
     height: 100%;
     min-height: 0;
     flex: 1;
   }
 
-  .sidebar {
+  .is-compact .sidebar {
     position: absolute;
     inset: 0 auto 0 0;
     width: min(360px, calc(100vw - 48px));
@@ -1954,13 +1957,13 @@ body {
     transition: transform 0.22s ease, visibility 0s linear 0.22s;
   }
 
-  .sidebar.is-open {
+  .is-compact .sidebar.is-open {
     transform: translateX(0);
     visibility: visible;
     transition: transform 0.22s ease, visibility 0s;
   }
 
-  .sidebar-overlay {
+  .is-compact .sidebar-overlay {
     display: block;
     position: absolute;
     inset: 0;
@@ -1970,93 +1973,93 @@ body {
     border: 0;
     background: rgba(15, 23, 42, 0.42);
     z-index: 19;
-  }
+  }/* Sticky top in sidebar */
 
-  /* Sticky top in sidebar */
-  .sidebar-sticky-top {
+  
+  .is-compact .sidebar-sticky-top {
     padding: 8px 10px 6px 10px;
     gap: 6px;
   }
 
-  .search-input {
+  .is-compact .search-input {
     padding: 7px 32px 7px 32px;
     font-size: 12.5px;
     border-radius: 8px;
   }
 
-  .filter-tabs {
+  .is-compact .filter-tabs {
     gap: 4px;
     padding: 3px;
     border-radius: 8px;
   }
 
-  .tab-btn {
+  .is-compact .tab-btn {
     padding: 6px 2px;
     font-size: 11px;
     gap: 3px;
   }
 
-  .tab-counter {
+  .is-compact .tab-counter {
     font-size: 9.5px;
     padding: 1px 4px;
-  }
+  }/* Scroll area */
 
-  /* Scroll area */
-  .sidebar-scroll-area {
+  
+  .is-compact .sidebar-scroll-area {
     padding: 0 10px 14px 10px;
-  }
+  }/* Section header */
 
-  /* Section header */
-  .section-sticky-header {
+  
+  .is-compact .section-sticky-header {
     padding: 8px 2px;
   }
 
-  .section-title {
+  .is-compact .section-title {
     font-size: 11px;
     letter-spacing: 0.5px;
     gap: 5px;
   }
 
-  .badge-pill {
+  .is-compact .badge-pill {
     font-size: 10px;
     padding: 1px 6px;
-  }
+  }/* Cards */
 
-  /* Cards */
-  .cam-card,
-  .wifi-card-btn {
+  
+  .is-compact .cam-card,
+  .is-compact .wifi-card-btn {
     padding: 8px 10px;
     gap: 10px;
     border-radius: 10px;
   }
 
-  .cam-status-pill,
-  .wifi-icon-wrap {
+  .is-compact .cam-status-pill,
+  .is-compact .wifi-icon-wrap {
     width: 30px;
     height: 30px;
     border-radius: 8px;
   }
 
-  .cam-name {
+  .is-compact .cam-name {
     font-size: 13px;
   }
 
-  .cam-loc {
+  .is-compact .cam-loc {
     font-size: 11px;
   }
 
-  .cam-channel-tag {
+  .is-compact .cam-channel-tag {
     font-size: 9.5px;
     padding: 2px 5px;
-  }
+  }/* ── Player Modal on Mobile ── */
 
-  /* ── Player Modal on Mobile ── */
-  .modal-backdrop {
+  
+  .is-compact .modal-backdrop {
     padding: 10px;
     align-items: center;
   }
 
-  .modal {
+  .is-compact .modal {
     width: 100%;
     max-width: 100%;
     height: auto;
@@ -2069,11 +2072,11 @@ body {
     overscroll-behavior: contain;
   }
 
-  .player {
+  .is-compact .player {
     gap: 6px;
   }
 
-  .player-head {
+  .is-compact .player-head {
     flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
@@ -2081,7 +2084,7 @@ body {
     padding-right: 0;
   }
 
-  .player-title-block {
+  .is-compact .player-title-block {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -2090,18 +2093,18 @@ body {
     min-width: 0;
   }
 
-  .player-channel-pill {
+  .is-compact .player-channel-pill {
     font-size: 10.5px;
     padding: 4px 7px;
     margin-top: 2px;
   }
 
-  .player-title-info {
+  .is-compact .player-title-info {
     flex: 1;
     min-width: 0;
   }
 
-  .player-title {
+  .is-compact .player-title {
     font-size: 13px;
     line-height: 1.2;
     white-space: nowrap;
@@ -2110,7 +2113,7 @@ body {
     text-overflow: ellipsis;
   }
 
-  .player-location {
+  .is-compact .player-location {
     font-size: 11px;
     margin-top: 1px;
     white-space: nowrap;
@@ -2118,7 +2121,7 @@ body {
     text-overflow: ellipsis;
   }
 
-  .player-actions {
+  .is-compact .player-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -2128,7 +2131,7 @@ body {
     flex-wrap: nowrap;
   }
 
-  .status-indicator-pill {
+  .is-compact .status-indicator-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2142,7 +2145,7 @@ body {
     letter-spacing: 0;
   }
 
-  .status-indicator-pill::before {
+  .is-compact .status-indicator-pill::before {
     content: '';
     width: 7px;
     height: 7px;
@@ -2150,89 +2153,89 @@ body {
     background: currentColor;
   }
 
-  .status-indicator-pill > * {
+  .is-compact .status-indicator-pill > * {
     display: none;
   }
 
-  .btn-group {
+  .is-compact .btn-group {
     gap: 4px;
     flex-wrap: nowrap;
   }
 
-  .player-btn {
+  .is-compact .player-btn {
     height: 30px;
     padding: 4px 8px;
     font-size: 11.5px;
     gap: 4px;
   }
 
-  .player-btn.btn-icon-only {
+  .is-compact .player-btn.btn-icon-only {
     width: 30px;
     height: 30px;
     padding: 4px;
   }
 
-  .player-note {
+  .is-compact .player-note {
     font-size: 10.5px;
     gap: 6px;
     justify-content: center;
     text-align: center;
     padding: 2px 0;
-  }
+  }/* Popups */
 
-  /* Popups */
-  .popup-card {
+  
+  .is-compact .popup-card {
     padding: 10px 12px;
     min-width: 150px;
     max-width: 220px;
     gap: 4px;
   }
 
-  .popup-title {
+  .is-compact .popup-title {
     font-size: 13px;
   }
 
-  .popup-loc {
+  .is-compact .popup-loc {
     font-size: 11px;
     margin-bottom: 4px;
   }
 
-  .popup-play-btn,
-  .popup-gmaps-btn {
+  .is-compact .popup-play-btn,
+  .is-compact .popup-gmaps-btn {
     padding: 6px 10px;
     font-size: 11.5px;
     border-radius: 7px;
   }
 
-  .custom-zoom-controls {
+  .is-compact .custom-zoom-controls {
     top: 12px;
     left: 12px;
     right: auto;
     border-radius: 9px;
   }
 
-  .zoom-btn {
+  .is-compact .zoom-btn {
     width: 30px;
     height: 30px;
   }
 }
 
 @media (max-width: 768px) and (max-height: 500px) {
-  .modal {
+  .is-compact .modal {
     width: min(100%, 480px);
   }
 
-  .player-head {
+  .is-compact .player-head {
     flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
   }
 
-  .player-title-block {
+  .is-compact .player-title-block {
     flex: 1 1 180px;
   }
 
-  .player-actions {
+  .is-compact .player-actions {
     width: auto;
     flex: 0 0 auto;
     flex-wrap: nowrap;
@@ -2240,21 +2243,21 @@ body {
 }
 
 @media (max-width: 520px) {
-  .player-location {
+  .is-compact .player-location {
     display: none;
   }
 
-  .player-channel-pill {
+  .is-compact .player-channel-pill {
     gap: 3px;
     padding: 3px 5px;
   }
 
-  .player-btn .btn-label,
-  .player-btn.btn-danger span {
+  .is-compact .player-btn .btn-label,
+  .is-compact .player-btn.btn-danger span {
     display: none;
   }
 
-  .player-btn:not(.btn-icon-only) {
+  .is-compact .player-btn:not(.btn-icon-only) {
     width: 30px;
     padding: 4px;
   }
@@ -2262,46 +2265,46 @@ body {
 
 /* Extra small mobile screens (<= 440px) */
 @media (max-width: 440px) {
-  .player-btn .btn-label {
+  .is-compact .player-btn .btn-label {
     display: none;
   }
 
-  .player-btn {
+  .is-compact .player-btn {
     padding: 4px 6px;
   }
 
-  .player-btn.btn-danger {
+  .is-compact .player-btn.btn-danger {
     padding: 4px 8px;
   }
 
-  .player-btn.btn-danger .btn-label {
+  .is-compact .player-btn.btn-danger .btn-label {
     display: inline;
   }
 
-  .topbar {
+  .is-compact .topbar {
     padding: 6px 10px;
   }
 
-  .brand-logo-img {
+  .is-compact .brand-logo-img {
     height: 28px;
     max-width: 90px;
   }
 
-  .brand-title {
+  .is-compact .brand-title {
     font-size: 15px;
   }
 
-  .foot-toggle-btn {
+  .is-compact .foot-toggle-btn {
     padding: 4px 6px;
   }
 
-  .foot-info-tag {
+  .is-compact .foot-info-tag {
     display: none;
   }
 }
 
 @media (max-width: 768px) and (orientation: portrait) {
-  .monitor-wall {
+  .is-compact .monitor-wall {
     inset: auto;
     top: 0;
     left: 0;
@@ -2312,7 +2315,33 @@ body {
     transform-origin: top left;
   }
 
-  .monitor-player .player-body {
+  .is-compact .monitor-player .player-body {
     max-height: calc(50vw - 38px);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MODE "DIPASANG DI DASHBOARD" (embed)
+   ───────────────────────────────────────────────────────────────────
+   Ketika aplikasi ini ditampilkan di dalam iframe dashboard
+   SIPEDAS Admin, tata letaknya harus tetap versi desktop: sidebar
+   menempel di kiri, tombol hamburger TIDAK muncul (dipakai di
+   ponsel), dan blok brand di kiri atas disembunyikan karena dashboard
+   sudah punya logo serta navigasinya sendiri.
+
+   Sinyalnya datang dari URL: ?embed=1 (ditambahkan oleh induk).
+   Kelas .is-embed dipasang oleh React pada elemen akar.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.is-embed .mobile-menu-btn {
+  display: none !important;
+}
+
+.is-embed .brand {
+  display: none;
+}
+
+.is-embed .topbar {
+  justify-content: flex-end;
+  padding-left: 12px;
 }

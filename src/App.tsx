@@ -34,7 +34,7 @@ import {
   formatApiErrorMessage,
 } from './api';
 import type { Camera, StreamInfo, WifiPoint } from './types';
-import { installThemeBridge } from './frameThemeBridge';
+import { installThemeBridge, THEME_MSG } from './frameThemeBridge';
 
 type TabFilter = 'all' | 'cctv' | 'wifi';
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -60,7 +60,8 @@ function formatSyncTime(iso: string): string {
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window !== 'undefined') {
-      // 1. Tema dari halaman induk (portal Sapa Pedestrian) lewat ?theme=.
+      // 1. Tema dari halaman induk (portal Sapa Pedestrian / dashboard admin)
+      //    lewat ?theme=.
       const fromParent = new URLSearchParams(window.location.search).get('theme');
       if (fromParent === 'dark' || fromParent === 'light') return fromParent;
       // 2. Pilihan pengguna.
@@ -70,6 +71,24 @@ export const App: React.FC = () => {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     }
     return 'light';
+  });
+
+  /* Mode "dipasang di dashboard": induk menambahkan ?embed=1 ke URL frame.
+     Dalam mode ini tata letak tetap versi desktop (sidebar di kiri, tanpa
+     tombol hamburger, tanpa blok brand) walau iframe-nya sempit. */
+  const [isEmbedded] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const embed = new URLSearchParams(window.location.search).get('embed');
+    return embed === '1' || embed === 'desktop' || embed === 'true';
+  });
+
+  /* Tampilan ringkas (ponsel): drawer + tombol hamburger.
+     Hanya aktif bila TIDAK dipasang di dashboard. */
+  const [isCompact, setIsCompact] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const embed = new URLSearchParams(window.location.search).get('embed');
+    const embedded = embed === '1' || embed === 'desktop' || embed === 'true';
+    return !embedded && window.innerWidth <= 768;
   });
 
   // Inisialisasi awal dengan data cache offline agar UI langsung tampil cepat (0ms)
@@ -113,7 +132,7 @@ export const App: React.FC = () => {
   }, [theme, themeDrivenByParent]);
 
   // Ikuti tema halaman induk saat aplikasi ini ditampilkan di dalam iframe
-  // (portal Sapa Pedestrian mengirim SIPEDAS_THEME_CHANGE).
+  // (portal Sapa Pedestrian & dashboard admin mengirim SIPEDAS_THEME_CHANGE).
   useEffect(() => {
     return installThemeBridge({
       applyTheme: (t) => document.documentElement.setAttribute('data-theme', t),
@@ -124,10 +143,39 @@ export const App: React.FC = () => {
     });
   }, []);
 
+  // Mode ringkas mengikuti lebar jendela — TAPI dikunci ke desktop bila
+  // aplikasi ini dipasang di dalam dashboard (?embed=1).
+  useEffect(() => {
+    if (isEmbedded) return;
+    const onResize = (): void => setIsCompact(window.innerWidth <= 768);
+    window.addEventListener('resize', onResize);
+    onResize();
+    return () => window.removeEventListener('resize', onResize);
+  }, [isEmbedded]);
+
+  // Kelas mode dipasang pada <html> supaya CSS (.is-compact / .is-embed)
+  // langsung berlaku — sama dengan yang dipasang script awal di index.html.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('is-embed', isEmbedded);
+    root.classList.toggle('is-compact', isCompact && !isEmbedded);
+  }, [isEmbedded, isCompact]);
+
   const toggleTheme = useCallback((): void => {
     // Pilihan manual pengguna selalu menang dan ikut disimpan.
     setThemeDrivenByParent(false);
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setTheme((prev) => {
+      const next: ThemeMode = prev === 'dark' ? 'light' : 'dark';
+      // Beri tahu induk supaya tema di dashboard ikut berubah (two-way sync).
+      try {
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: THEME_MSG, theme: next }, '*');
+        }
+      } catch {
+        /* induk sudah ditutup — abaikan */
+      }
+      return next;
+    });
   }, []);
 
   // Muat daftar kamera & WiFi dari API dengan ketahanan offline

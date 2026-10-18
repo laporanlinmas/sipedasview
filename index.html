@@ -22,6 +22,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      /* Skrip kecil sebelum React dimuat:
+         - `is-embed`  → aplikasi dipasang di dashboard: tata letak desktop,
+                         tanpa tombol hamburger dan tanpa blok brand.
+         - `is-compact`→ tampilan ponsel (drawer + hamburger).
+         Dipasang langsung di <html> supaya tidak ada kedipan saat halaman
+         pertama kali digambar. */
+      (function () {
+        try {
+          var q = new URLSearchParams(location.search);
+          var embed = q.get('embed');
+          var embedded = embed === '1' || embed === 'desktop' || embed === 'true';
+          var d = document.documentElement;
+          if (embedded) d.classList.add('is-embed');
+          else if (window.innerWidth <= 768) d.classList.add('is-compact');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
